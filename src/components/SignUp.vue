@@ -3,17 +3,39 @@
     <img class="logo" src="../assets//app-logo.webp" alt="" />
     <h1>Sign Up</h1>
     <div class="register">
-      <input type="text" placeholder="Enter name" />
-      <input type="email" placeholder="Enter email" />
-      <input type="password" placeholder="Enter password" />
-      <button>Sign up</button>
+      <input type="text" v-model="name" placeholder="Enter name" />
+      <input type="email" v-model="email" placeholder="Enter email" />
+      <input type="password" v-model="password" placeholder="Enter password" />
+      <button v-on:click="signUp">Sign up</button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "SignUp",
+  data() {
+    return {
+      name: "",
+      email: "",
+      password: "",
+    };
+  },
+  methods: {
+    async signUp() {
+      let result = await axios.post("http://localhost:3000/users", {
+        email: this.email,
+        password: this.password,
+        name: this.name,
+      });
+      if (result.status == 201) {
+        alert("Sign up successful!");
+        localStorage.setItem("user-data", JSON.stringify(result.data));
+      }
+    },
+  },
 };
 </script>
 
